@@ -1,0 +1,59 @@
+#Esta clase es la que define el reloj del juego
+from tkinter import *
+
+class Reloj:
+
+    # Our time structure [horas, segundos, centidegundos]
+    timer = [0, 0, 0, 0]
+    pattern = '{0:02d}:{1:02d}:{2:02d}'
+
+    # Simple status flag
+    # False mean the timer is not running
+    # True means the timer is running (counting)
+    state = False
+
+    def __init__(self, ventana):
+        self.ventana = ventana
+        self.tiempo = Label(ventana, text="00:00:00", font=("Helvetica", 20))
+        self.tiempo.grid()
+
+    def update_timeText(self):
+        if (self.state):
+            self.timer
+            #incrementa 1 centisegundo
+            self.timer[3] += 1
+            # Cada 100 centisegundos es igual a un segundo
+            if (self.timer[3] >= 100):
+                self.timer[3] = 0
+                self.timer[2] += 1
+            # Cada 60 segundos es igual a 1 minuto
+            if (self.timer[2] >= 60):
+                self.timer[1] += 1
+                self.timer[2] = 0
+            # Cada 60 minutos es igual a 1 hora
+            if (self.timer[1] >= 60):
+                self.timer[0] += 1
+                self.timer[1] = 0
+            # We create our time string here
+            self.timeString = self.pattern.format(self.timer[0], self.timer[1],
+                                                  self.timer[2])
+            # Update the timeText Label box with the current time
+            self.tiempo.configure(text=self.timeString)
+            # Call the update_timeText() function after 1 centisecond
+        self.ventana.after(10, self.update_timeText)
+
+    # To start the kitchen timer
+    def start(self):
+        self.state = True
+
+    # To pause the kitchen timer
+    def pause(self):
+        self.state = False
+
+    # To reset the timer to 00:00:00
+    def reset(self):
+        self.timer = [0, 0, 0]
+        self.tiempo.configure(text='00:00:00')
+
+Reloj().start()
+
